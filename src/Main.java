@@ -1,142 +1,102 @@
-import FoodDelivery.FoodDeliveryService;
+import FoodDelivery.*;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args){
-        FoodDeliveryService service = new FoodDeliveryService();
+    public static void main(String[] args) {
+        // Conectare la baza de date
+        BazaDeDate bazaDeDate = BazaDeDate.getInstanta("jdbc:mysql://localhost:3306/fooddelivery", "root", "");
 
-        //creez localuri
-        service.creeazaLocal("Casa MYT", "Drumul Taberei nr.10", "0765123456");
-        service.creeazaLocal("Atlantic", "Drumul Sarii nr.34", "021345678");
+        // Creez localuri
+        Local local1 = new Local("Casa MYT", "Drumul Taberei nr.10", "0765123456");
+        //bazaDeDate.insereazaLocal(local1);
 
-        //le caut dupa nume
-        //System.out.println(service.cautaLocalDupaNume("Casa MYT"));
-        //System.out.println(service.cautaLocalDupaNume("Atlantic"));
+        Local local2 = new Local("Atlantic", "Drumul Sarii nr.34", "021345678");
+        //bazaDeDate.insereazaLocal(local2);
 
-        //creez clienti
-        service.creeazaContClient("Mustatoiu", "Sebastian", "sebic.ms@gmail.com", "0756836289",
-                            "jnfiernvre");
-        service.creeazaContClient("Prioteasa", "Rares", "rares.prioteasa@gmail.com", "0739876109",
-                                  "kjgfgjhkjlh");
+        // Afisez localurile
+        bazaDeDate.afiseazaLocaluri();
 
-        //ii caut dupa email
-        //System.out.println(service.cautaClientDupaEmail("sebic.ms@gmail.com") + "\n");
-        //System.out.println(service.cautaClientDupaEmail("rares.prioteasa@gmail.com") + "\n");
+        // Creez clienti
+        Client client1 = new Client("Mustatoiu", "Sebastian", "sebic.ms@gmail.com", "0756836289", "jnfiernvre");
+        //bazaDeDate.insereazaClient(client1);
 
+        Client client2 = new Client("Prioteasa", "Rares", "rares.prioteasa@gmail.com", "0739876109", "kjgfgjhkjlh");
+        //bazaDeDate.insereazaClient(client2);
 
-        //creez soferi
-        service.creeazaContSofer("Dumitru", "Bogdan", "dumitru.bogdan@gmail.com", "0757499789",
-                                 "kehgibou", "IF 12 BAD");
-        service.creeazaContSofer("Tanasescu", "Bogdan", "tanasescu.bogdan@gmail.com", "0757476589",
-                "jtdsyetrd", "TL 34 NOM");
+        // Afisez clientii
+        bazaDeDate.afiseazaClienti();
 
-        //ii caut dupa email
-        //System.out.println(service.cautaSoferDupaEmail("dumitru.bogdan@gmail.com") + "\n");
-        //System.out.println(service.cautaSoferDupaEmail("tanasescu.bogdan@gmail.com") + "\n");
+        Meniu meniu1 = new Meniu("Casa MYT");
+        //bazaDeDate.insereazaMeniu(meniu1);
 
-        //le afisez pe toate
-        service.afiseazaConturiClienti();
-        service.afiseazaConturiSoferi();
+        Meniu meniu2 = new Meniu("Atlantic");
+        //bazaDeDate.insereazaMeniu(meniu2);
 
-        //creez produse pentru restaurantul 1
-        FoodDelivery.Produs produs1 = service.creeazaProdus("Quatro Staggioni", 30.0, 400.0);
-        FoodDelivery.Produs produs2 = service.creeazaProdus("Quatro Formaggi", 28.0, 350.0);
+        bazaDeDate.afiseazaMeniuri();
 
-        FoodDelivery.Produs produs3 = service.creeazaProdus("Pepsi", 6.0, 500.0);
-        FoodDelivery.Produs produs4 = service.creeazaProdus("Fanta", 5.0, 500.0);
+        // Creez categorii de produse pentru localul 1
+        CategorieProduse categorie1 = new CategorieProduse("Pizza");
+        //bazaDeDate.insereazaCategorie(categorie1, "Casa MYT");
+        bazaDeDate.preiaIdCategorie(categorie1, "Casa MYT");
 
-        //creez categorii de produse pentru restaurantul 1
-        FoodDelivery.CategorieProduse categorie1 = service.creeazaCategorie("Pizza");
-        FoodDelivery.CategorieProduse categorie2 = service.creeazaCategorie("Bauturi");
+        CategorieProduse categorie2 = new CategorieProduse("Bauturi");
+        //bazaDeDate.insereazaCategorie(categorie2, "Casa MYT");
+        bazaDeDate.preiaIdCategorie(categorie2, "Casa MYT");
 
-        //adaug produse la categorii pentru restaurantul 1
-        service.adaugaProdusLaCategorie(produs1, categorie1);
-        service.adaugaProdusLaCategorie(produs2, categorie1);
-        service.adaugaProdusLaCategorie(produs3, categorie2);
-        service.adaugaProdusLaCategorie(produs4, categorie2);
+        // Creez categorii de produse pentru localul 2
+        CategorieProduse categorie3 = new CategorieProduse("Salate");
+        //bazaDeDate.insereazaCategorie(categorie3, "Atlantic");
+        bazaDeDate.preiaIdCategorie(categorie3, "Atlantic");
 
-        //creez un meniu pentru restaurantul 1
-        FoodDelivery.Meniu meniu1 = service.creeazaMeniu();
+        CategorieProduse categorie4 = new CategorieProduse("Bauturi");
+        //bazaDeDate.insereazaCategorie(categorie4, "Atlantic");
+        bazaDeDate.preiaIdCategorie(categorie4, "Atlantic");
 
-        //adaug categoriile la meniu
-        service.adaugaCategorieLaMeniu(categorie1, meniu1);
-        service.adaugaCategorieLaMeniu(categorie2, meniu1);
+        bazaDeDate.afiseazaCategorii();
 
-        //setez meniul pentru restaurant
-        FoodDelivery.Local local1 = service.cautaLocalDupaNume("Casa MYT");
-        service.adaugaMeniuLaLocal(meniu1, local1);
+        /*System.out.println("Categorie 1 ID: " + categorie1.getId());
+        System.out.println("Categorie 2 ID: " + categorie2.getId());
+        System.out.println("Categorie 3 ID: " + categorie3.getId());
+        System.out.println("Categorie 4 ID: " + categorie4.getId());*/
 
-        //afisez restaurantul 1
-        //System.out.println(local1);
+        //bazaDeDate.afiseazaCategorie(1);
 
-        //creez produse pentru restaurantul 2
-        FoodDelivery.Produs produs5 = service.creeazaProdus("Cesar", 25.0, 300.0);
-        FoodDelivery.Produs produs6 = service.creeazaProdus("Bulgareasca", 28.0, 350.0);
+        // Creez produse pentru localul 1
+        Produs produs1 = new Produs("Quatro Staggioni", 30.0, 400.0, categorie1.getId());
+        //bazaDeDate.insereazaProdus(produs1);
 
-        FoodDelivery.Produs produs7 = service.creeazaProdus("Cola", 6.0, 500.0);
-        FoodDelivery.Produs produs8 = service.creeazaProdus("Sprite", 5.0, 500.0);
+        Produs produs2 = new Produs("Quatro Formaggi", 28.0, 350.0, categorie1.getId());
+        //bazaDeDate.insereazaProdus(produs2);
 
-        //creez categorii de produse pentru restaurantul 2
-        FoodDelivery.CategorieProduse categorie3 = service.creeazaCategorie("Salate");
-        FoodDelivery.CategorieProduse categorie4 = service.creeazaCategorie("Bauturi");
+        Produs produs3 = new Produs("Pepsi", 6.0, 500.0, categorie2.getId());
+        //bazaDeDate.insereazaProdus(produs3);
 
-        //adaug produse la categorii pentru restaurantul 2
-        service.adaugaProdusLaCategorie(produs5, categorie3);
-        service.adaugaProdusLaCategorie(produs6, categorie3);
-        service.adaugaProdusLaCategorie(produs7, categorie4);
-        service.adaugaProdusLaCategorie(produs8, categorie4);
+        Produs produs4 = new Produs("Fanta", 5.0, 500.0, categorie2.getId());
+        //bazaDeDate.insereazaProdus(produs4);
 
-        //creez un meniu pentru restaurantul 2
-        FoodDelivery.Meniu meniu2 = service.creeazaMeniu();
+        // Creez produse pentru localul 2
+        Produs produs5 = new Produs("Cesar", 25.0, 300.0, categorie3.getId());
+        //bazaDeDate.insereazaProdus(produs5);
 
-        //adaug categoriile la meniu
-        service.adaugaCategorieLaMeniu(categorie3, meniu2);
-        service.adaugaCategorieLaMeniu(categorie4, meniu2);
+        Produs produs6 = new Produs("Bulgareasca", 28.0, 350.0, categorie3.getId());
+        //bazaDeDate.insereazaProdus(produs6);
 
-        //setez meniul pentru restaurant
-        FoodDelivery.Local local2 = service.cautaLocalDupaNume("Atlantic");
-        service.adaugaMeniuLaLocal(meniu2, local2);
+        Produs produs7 = new Produs("Cola", 6.0, 500.0, categorie4.getId());
+        //bazaDeDate.insereazaProdus(produs7);
 
-        //afisez restaurantul 2
-        //System.out.println(local2);
+        Produs produs8 = new Produs("Sprite", 5.0, 500.0, categorie4.getId());
+        //bazaDeDate.insereazaProdus(produs8);
 
-        //afisez localurile
-        //service.afiseazaLocaluri();
+        // Afisez produsele
+        bazaDeDate.afiseazaProduse();
 
-        //creez recenzii pentru restaurantul 1 si le adaug
-        FoodDelivery.Recenzie recenzie1 = service.creeazaRecenzie("Excelent!", 5);
-        FoodDelivery.Recenzie recenzie2 = service.creeazaRecenzie("Prea scump", 3);
-
-        service.adaugaRecenzieLocal(local1, recenzie1);
-        service.adaugaRecenzieLocal(local1, recenzie2);
-
-        //creez recenzii pentru restaurantul 2 si le adaug
-        FoodDelivery.Recenzie recenzie3 = service.creeazaRecenzie("Foarte bun, voi reveni!!", 5);
-        FoodDelivery.Recenzie recenzie4 = service.creeazaRecenzie("Ospatarii sunt nepoliticosi", 2);
-
-        service.adaugaRecenzieLocal(local2, recenzie3);
-        service.adaugaRecenzieLocal(local2, recenzie4);
-
-        service.afiseazaLocaluri();
-
-        //creez o comanda
-        FoodDelivery.Client client = service.cautaClientDupaEmail("sebic.ms@gmail.com");
-        FoodDelivery.Sofer sofer = service.cautaSoferDupaEmail("dumitru.bogdan@gmail.com");
-
-        List<FoodDelivery.Produs> cos= new ArrayList<>();
-        cos.add(produs1);
-        cos.add(produs3);
-        cos.add(produs5);
-
-        service.creazaComanda(client, "Strada Piatra nr 375", cos, sofer);
-
-        service.afiseazaComenzi();
-
-        //client.afisareIstoricComenzi();
 
 
     }
 }
+
+
+
+
