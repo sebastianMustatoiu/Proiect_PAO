@@ -22,6 +22,14 @@ public class Client extends Cont{
         return prenume;
     }
 
+    public String getNumarTelefon(){
+        return numarTelefon;
+    }
+
+    public String getParola(){
+        return parola;
+    }
+
     public void adaugaComanda(Comanda comanda){
 
         comenzi.add(comanda);

@@ -2,6 +2,7 @@ package FoodDelivery;
 import java.util.ArrayList;
 import java.util.List;
 public class CategorieProduse {
+    private int id;
     private String nume;
     private List<Produs> listaProduse;
 
@@ -10,6 +11,8 @@ public class CategorieProduse {
         this.listaProduse = new ArrayList<>();
     }
 
+    public int getId(){return id;}
+
     public String getNume() {
         return nume;
     }
@@ -17,6 +20,8 @@ public class CategorieProduse {
     public void setNume(String nume) {
         this.nume = nume;
     }
+
+    public void setId(int id){this.id = id;}
 
     public void adaugaProdus(Produs produs){
         listaProduse.add(produs);

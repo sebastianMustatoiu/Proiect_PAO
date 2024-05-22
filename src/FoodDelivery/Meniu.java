@@ -2,10 +2,21 @@ package FoodDelivery;
 import java.util.ArrayList;
 import java.util.List;
 public class Meniu {
+
+    private String localNume;
     private List<CategorieProduse> categorii;
 
     public Meniu(){
         this.categorii = new ArrayList<>();
+    }
+
+    public Meniu(String localNume) {
+        this.localNume = localNume;
+        this.categorii = new ArrayList<>();
+    }
+
+    public String getLocalNume(){
+        return localNume;
     }
 
     public void adaugaCategorie(CategorieProduse categorie){

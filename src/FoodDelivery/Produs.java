@@ -1,15 +1,21 @@
 package FoodDelivery;
 
 public class Produs {
+
+    private int id;
     private String nume;
     private double pret;
     private double gramaj;
+    private int categorieId;
 
-    public Produs(String nume, double pret, double gramaj){
+    public Produs(String nume, double pret, double gramaj, int categorieId){
         this.nume = nume;
         this.pret = pret;
         this.gramaj = gramaj;
+        this.categorieId = categorieId;
     }
+
+    public int getId(){return id;}
 
     public String getNume(){
         return nume;
@@ -17,6 +23,8 @@ public class Produs {
     public double getPret(){
         return pret;
     }
+
+    public int getCategorieId(){return categorieId;}
 
     public void setPret(double pret){
         if(pret >= 0){

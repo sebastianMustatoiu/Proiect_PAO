@@ -4,11 +4,13 @@ import java.sql.*;
 public class BazaDeDate {
     private static BazaDeDate instanta;
     private Connection connection;
+    private AuditService auditService;
 
     private BazaDeDate(String url){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             this.connection = DriverManager.getConnection(url);
+            this.auditService= AuditService.getInstanta();
         }
         catch(Exception e){
             e.printStackTrace();
@@ -18,6 +20,7 @@ public class BazaDeDate {
     private BazaDeDate(String url, String user, String password){
         try {
             this.connection = DriverManager.getConnection(url, user, password);
+            this.auditService= AuditService.getInstanta();
         }
         catch(SQLException e){
             e.printStackTrace();
@@ -50,6 +53,8 @@ public class BazaDeDate {
             statement.setString(4, client.getNumarTelefon());
             statement.setString(5, client.getParola());
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("insereazaClient");
         } catch(SQLException e){
             System.out.println("A aparut o problema la inserare client");
             e.printStackTrace();
@@ -69,6 +74,9 @@ public class BazaDeDate {
                 System.out.println("Email: " + rs.getString("email"));
                 System.out.println("Numar Telefon: " + rs.getString("numar_telefon"));
                 System.out.println("Parola: " + rs.getString("parola"));
+
+                auditService.inregistreazaActiune("afiseazaClient");
+
             } else {
                 System.out.println("Nu s-a gasit niciun client cu email-ul: " + email);
             }
@@ -88,6 +96,9 @@ public class BazaDeDate {
             statement.setString(4, client.getParola());
             statement.setString(5, client.getEmail());
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("actualizeazaClient");
+
         } catch(SQLException e){
             System.out.println("A aparut o problema la actualizarea clientului");
             e.printStackTrace();
@@ -100,6 +111,9 @@ public class BazaDeDate {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, email);
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("stergeClient");
+
         } catch(SQLException e){
             System.out.println("A aparut o problema la stergerea clientului");
             e.printStackTrace();
@@ -117,6 +131,9 @@ public class BazaDeDate {
             statement.setString(3, local.getNumarContact());
             statement.setDouble(4, local.getRating());
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("insereazaLocal");
+
         }
         catch(SQLException e){
             System.out.println("A aparut o problema la inserare local");
@@ -136,6 +153,9 @@ public class BazaDeDate {
                 System.out.println("Adresa: " + rs.getString("adresa"));
                 System.out.println("Numar Contact: " + rs.getString("numar_contact"));
                 System.out.println("Rating: " + rs.getDouble("rating"));
+
+                auditService.inregistreazaActiune("afiseazaLocal");
+
             } else {
                 System.out.println("Nu s-a gasit niciun local cu numele: " + nume);
             }
@@ -154,6 +174,8 @@ public class BazaDeDate {
             statement.setDouble(3, local.getRating());
             statement.setString(4, local.getNume());
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("actualizeazaLocal");
         } catch(SQLException e){
             System.out.println("A aparut o problema la actualizarea localului");
             e.printStackTrace();
@@ -166,6 +188,9 @@ public class BazaDeDate {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, nume);
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("stergeLocal");
+
         } catch(SQLException e){
             System.out.println("A aparut o problema la stergerea localului");
             e.printStackTrace();
@@ -179,6 +204,9 @@ public class BazaDeDate {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, meniu.getLocalNume());
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("insereazaMeniu");
+
         }
         catch(SQLException e){
             System.out.println("A aparut o problema la inserare meniu");
@@ -196,6 +224,9 @@ public class BazaDeDate {
                 System.out.println("Meniu pentru localul: " + localNume);
                 // Afișarea detaliilor meniului
                 System.out.println("Numele localului: " + rs.getString("local_nume"));
+
+                auditService.inregistreazaActiune("afiseazaMeniu");
+
             } else {
                 System.out.println("Nu s-a gasit niciun meniu pentru localul: " + localNume);
             }
@@ -211,6 +242,9 @@ public class BazaDeDate {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, meniu.getLocalNume());
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("actualizeazaMeniu");
+
         } catch(SQLException e){
             System.out.println("A aparut o problema la actualizarea meniului");
             e.printStackTrace();
@@ -223,6 +257,9 @@ public class BazaDeDate {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, localNume);
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("stergeMeniu");
+
         } catch(SQLException e){
             System.out.println("A aparut o problema la stergerea meniului");
             e.printStackTrace();
@@ -237,6 +274,9 @@ public class BazaDeDate {
             statement.setString(1, categorie.getNume());
             statement.setString(2, meniuLocalNume);
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("insereazaCategorie");
+
 
             // Obține ID-ul generat
             ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -261,6 +301,9 @@ public class BazaDeDate {
                 System.out.println("Categorie ID: " + rs.getInt("id"));
                 System.out.println("Nume: " + rs.getString("nume"));
                 System.out.println("Menu Local Nume: " + rs.getString("menu_local_nume"));
+
+                auditService.inregistreazaActiune("afiseazaCategorie");
+
             } else {
                 System.out.println("Nu s-a gasit nicio categorie cu ID-ul: " + id);
             }
@@ -277,6 +320,9 @@ public class BazaDeDate {
             statement.setString(1, categorie.getNume());
             statement.setInt(2, categorie.getId());
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("actualizeazaCategorie");
+
         } catch(SQLException e){
             System.out.println("A aparut o problema la actualizarea categoriei");
             e.printStackTrace();
@@ -289,6 +335,9 @@ public class BazaDeDate {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, id);
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("stergeCategorie");
+
         } catch(SQLException e){
             System.out.println("A aparut o problema la stergerea categoriei");
             e.printStackTrace();
@@ -325,6 +374,9 @@ public class BazaDeDate {
             statement.setDouble(3, produs.getGramaj());
             statement.setInt(4, produs.getCategorieId());
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("insereazaProdus");
+
         } catch(SQLException e) {
             System.out.println("A aparut o problema la inserare produs");
             e.printStackTrace();
@@ -346,6 +398,9 @@ public class BazaDeDate {
                 System.out.println("Pret: " + rs.getDouble("pret"));
                 System.out.println("Gramaj: " + rs.getDouble("gramaj"));
                 System.out.println("Categorie ID: " + rs.getInt("categorie_id"));
+
+                auditService.inregistreazaActiune("afiseazaProdus");
+
             } else {
                 System.out.println("Nu s-a gasit niciun produs cu ID-ul: " + id);
             }
@@ -365,6 +420,9 @@ public class BazaDeDate {
             statement.setInt(4, produs.getCategorieId());
             statement.setInt(5, produs.getId());
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("actualizeazaProdus");
+
         } catch(SQLException e){
             System.out.println("A aparut o problema la actualizarea produsului");
             e.printStackTrace();
@@ -377,6 +435,9 @@ public class BazaDeDate {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, id);
             statement.executeUpdate();
+
+            auditService.inregistreazaActiune("stergeProdus");
+
         } catch(SQLException e){
             System.out.println("A aparut o problema la stergerea produsului");
             e.printStackTrace();
@@ -398,7 +459,11 @@ public class BazaDeDate {
                                 " | Numar Telefon: " + rs.getString("numar_telefon") +
                                 " | Parola: " + rs.getString("parola")
                 );
+
+
             }
+            auditService.inregistreazaActiune("afiseazaClienti");
+
         } catch (SQLException e) {
             System.out.println("A aparut o problema la afisarea clientilor");
             e.printStackTrace();
@@ -419,6 +484,8 @@ public class BazaDeDate {
                                 " | Rating: " + rs.getDouble("rating")
                 );
             }
+            auditService.inregistreazaActiune("afiseazaLocaluri");
+
         } catch (SQLException e) {
             System.out.println("A aparut o problema la afisarea localurilor");
             e.printStackTrace();
@@ -436,6 +503,8 @@ public class BazaDeDate {
                         "Nume Local: " + rs.getString("local_nume")
                 );
             }
+            auditService.inregistreazaActiune("afiseazaMeniuri");
+
         } catch (SQLException e) {
             System.out.println("A aparut o problema la afisarea meniurilor");
             e.printStackTrace();
@@ -455,6 +524,8 @@ public class BazaDeDate {
                                 " | Meniul localului: " + rs.getString("menu_local_nume")
                 );
             }
+            auditService.inregistreazaActiune("afiseazaCategorii");
+
         } catch (SQLException e) {
             System.out.println("A aparut o problema la afisarea categoriilor");
             e.printStackTrace();
@@ -476,6 +547,8 @@ public class BazaDeDate {
                                 " | Categorie ID: " + rs.getInt("categorie_id")
                 );
             }
+            auditService.inregistreazaActiune("afiseazaProduse");
+
         } catch (SQLException e) {
             System.out.println("A aparut o problema la afisarea produselor");
             e.printStackTrace();

@@ -126,8 +126,8 @@ public final class FoodDeliveryService {
         System.out.println(local);
     }
 
-    public Produs creeazaProdus(String nume, double pret, double gramaj){
-        return new Produs(nume, pret, gramaj);
+    public Produs creeazaProdus(String nume, double pret, double gramaj, int categorieId){
+        return new Produs(nume, pret, gramaj, categorieId);
     }
 
     public CategorieProduse creeazaCategorie(String nume){
